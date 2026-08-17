@@ -1,10 +1,6 @@
-
-// Controller REST de Relatorio: endpoints explícitos (sem controller base genérica).
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftwareContabil.Application.IService;
-using SoftwareContabil.Application.Service;
 using SoftwareContabil.Domain.Entities;
 
 namespace SoftwareContabil.Api.Controllers;
@@ -14,39 +10,39 @@ namespace SoftwareContabil.Api.Controllers;
 [Route("api/[controller]")]
 public class RelatorioController : ControllerBase
 {
-    private readonly IRelatorioService _service;
+    private readonly IRelatorioService _relatorioService;
 
-    public RelatorioController(IRelatorioService service)
+    public RelatorioController(IRelatorioService relatorioService)
     {
-        _service = service;
+        _relatorioService = relatorioService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Relatorio>>> GetAll(CancellationToken ct)
-        => Ok(await _service.GetAllAsync(ct));
+        => Ok(await _relatorioService.GetAllAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Relatorio>> GetById(int id, CancellationToken ct)
-        => Ok(await _service.GetByIdAsync(id, ct));
+        => Ok(await _relatorioService.GetByIdAsync(id, ct));
 
     [HttpPost]
     public async Task<ActionResult<Relatorio>> Create([FromBody] Relatorio entity, CancellationToken ct)
     {
-        var created = await _service.CreateAsync(entity, ct);
+        var created = await _relatorioService.CreateAsync(entity, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Relatorio entity, CancellationToken ct)
     {
-        await _service.UpdateAsync(id, entity, ct);
+        await _relatorioService.UpdateAsync(id, entity, ct);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _service.DeleteAsync(id, ct);
+        await _relatorioService.DeleteAsync(id, ct);
         return NoContent();
     }
 }

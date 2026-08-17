@@ -12,50 +12,50 @@ public record BaixarBemDto(DateTime Data, double Valor, string? Observacao, int 
 [Route("api/[controller]")]
 public class PatrimonioController : ControllerBase
 {
-    private readonly IPatrimonioService _service;
+    private readonly IPatrimonioService _patrimonioService;
 
-    public PatrimonioController(IPatrimonioService service)
+    public PatrimonioController(IPatrimonioService patrimonioService)
     {
-        _service = service;
+        _patrimonioService = patrimonioService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Patrimonio>>> GetAll(CancellationToken ct)
-        => Ok(await _service.GetAllAsync(ct));
+        => Ok(await _patrimonioService.GetAllAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Patrimonio>> GetById(int id, CancellationToken ct)
-        => Ok(await _service.GetByIdAsync(id, ct));
+        => Ok(await _patrimonioService.GetByIdAsync(id, ct));
 
     [HttpPost]
     public async Task<ActionResult<Patrimonio>> Create([FromBody] Patrimonio entity, CancellationToken ct)
     {
-        var created = await _service.CreateAsync(entity, ct);
+        var created = await _patrimonioService.CreateAsync(entity, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Patrimonio entity, CancellationToken ct)
     {
-        await _service.UpdateAsync(id, entity, ct);
+        await _patrimonioService.UpdateAsync(id, entity, ct);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _service.DeleteAsync(id, ct);
+        await _patrimonioService.DeleteAsync(id, ct);
         return NoContent();
     }
 
     [HttpGet("ativos/{cliforId}")]
     public async Task<ActionResult<IEnumerable<Patrimonio>>> Ativos(string cliforId, CancellationToken ct)
-        => Ok(await _service.GetAtivosAsync(cliforId, ct));
+        => Ok(await _patrimonioService.GetAtivosAsync(cliforId, ct));
 
     [HttpPost("{id}/baixar")]
     public async Task<ActionResult<BaixaBem>> Baixar(int id, [FromBody] BaixarBemDto dto, CancellationToken ct)
     {
         var request = new BaixarBemRequest(dto.Data, dto.Valor, dto.Observacao, dto.MotivoBaixaId);
-        return Ok(await _service.BaixarAsync(id, request, ct));
+        return Ok(await _patrimonioService.BaixarAsync(id, request, ct));
     }
 }

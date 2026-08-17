@@ -1,10 +1,6 @@
-
-// Controller REST de DespesaInvestimento: endpoints explícitos (sem controller base genérica).
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftwareContabil.Application.IService;
-using SoftwareContabil.Application.Service;
 using SoftwareContabil.Domain.Entities;
 
 namespace SoftwareContabil.Api.Controllers;

@@ -1,10 +1,6 @@
-
-// Controller REST de Marca: endpoints explícitos (sem controller base genérica).
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftwareContabil.Application.IService;
-using SoftwareContabil.Application.Service;
 using SoftwareContabil.Domain.Entities;
 
 namespace SoftwareContabil.Api.Controllers;
@@ -14,39 +10,39 @@ namespace SoftwareContabil.Api.Controllers;
 [Route("api/[controller]")]
 public class MarcaController : ControllerBase
 {
-    private readonly IMarcaService _service;
+    private readonly IMarcaService _marcaService;
 
-    public MarcaController(IMarcaService service)
+    public MarcaController(IMarcaService marcaService)
     {
-        _service = service;
+        _marcaService = marcaService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Marca>>> GetAll(CancellationToken ct)
-        => Ok(await _service.GetAllAsync(ct));
+        => Ok(await _marcaService.GetAllAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Marca>> GetById(int id, CancellationToken ct)
-        => Ok(await _service.GetByIdAsync(id, ct));
+        => Ok(await _marcaService.GetByIdAsync(id, ct));
 
     [HttpPost]
     public async Task<ActionResult<Marca>> Create([FromBody] Marca entity, CancellationToken ct)
     {
-        var created = await _service.CreateAsync(entity, ct);
+        var created = await _marcaService.CreateAsync(entity, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Marca entity, CancellationToken ct)
     {
-        await _service.UpdateAsync(id, entity, ct);
+        await _marcaService.UpdateAsync(id, entity, ct);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _service.DeleteAsync(id, ct);
+        await _marcaService.DeleteAsync(id, ct);
         return NoContent();
     }
 }
