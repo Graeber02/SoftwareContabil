@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: software-contabil-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: software_contabil
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql
+      - ./db/002_functions.sql:/docker-entrypoint-initdb.d/002_functions.sql
+
+volumes:
+  db_data:
