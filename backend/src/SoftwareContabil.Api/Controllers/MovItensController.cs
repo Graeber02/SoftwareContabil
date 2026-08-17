@@ -1,10 +1,6 @@
-
-// Controller REST de MovItens: endpoints explícitos (sem controller base genérica).
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftwareContabil.Application.IService;
-using SoftwareContabil.Application.Service;
 using SoftwareContabil.Domain.Entities;
 
 namespace SoftwareContabil.Api.Controllers;
@@ -14,39 +10,39 @@ namespace SoftwareContabil.Api.Controllers;
 [Route("api/[controller]")]
 public class MovItensController : ControllerBase
 {
-    private readonly IMovItensService _service;
+    private readonly IMovItensService _movitensService;
 
-    public MovItensController(IMovItensService service)
+    public MovItensController(IMovItensService movitensService)
     {
-        _service = service;
+        _movitensService = movitensService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MovItens>>> GetAll(CancellationToken ct)
-        => Ok(await _service.GetAllAsync(ct));
+        => Ok(await _movitensService.GetAllAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<MovItens>> GetById(int id, CancellationToken ct)
-        => Ok(await _service.GetByIdAsync(id, ct));
+        => Ok(await _movitensService.GetByIdAsync(id, ct));
 
     [HttpPost]
     public async Task<ActionResult<MovItens>> Create([FromBody] MovItens entity, CancellationToken ct)
     {
-        var created = await _service.CreateAsync(entity, ct);
+        var created = await _movitensService.CreateAsync(entity, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] MovItens entity, CancellationToken ct)
     {
-        await _service.UpdateAsync(id, entity, ct);
+        await _movitensService.UpdateAsync(id, entity, ct);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _service.DeleteAsync(id, ct);
+        await _movitensService.DeleteAsync(id, ct);
         return NoContent();
     }
 }

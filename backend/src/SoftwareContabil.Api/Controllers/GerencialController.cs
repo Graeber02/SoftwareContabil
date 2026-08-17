@@ -10,22 +10,22 @@ namespace SoftwareContabil.Api.Controllers;
 [Route("api/[controller]")]
 public class GerencialController : ControllerBase
 {
-    private readonly IGerencialService _service;
+    private readonly IGerencialService _gerencialService;
 
-    public GerencialController(IGerencialService service)
+    public GerencialController(IGerencialService gerencialService)
     {
-        _service = service;
+        _gerencialService = gerencialService;
     }
 
     [HttpGet("dre/{cliforId}")]
     public async Task<ActionResult> Dre(string cliforId, CancellationToken ct)
-        => Ok(await _service.GetDreAsync(cliforId, ct));
+        => Ok(await _gerencialService.GetDreAsync(cliforId, ct));
 
     [HttpGet("balancete/{cliforId}")]
     public async Task<ActionResult> Balancete(string cliforId, CancellationToken ct)
-        => Ok(await _service.GetBalanceteAsync(cliforId, ct));
+        => Ok(await _gerencialService.GetBalanceteAsync(cliforId, ct));
 
     [HttpGet("contas-pagar-receber/{cliforId}")]
     public async Task<ActionResult> ContasPagarReceber(string cliforId, CancellationToken ct)
-        => Ok(await _service.GetContasPagarReceberAsync(cliforId, ct));
+        => Ok(await _gerencialService.GetContasPagarReceberAsync(cliforId, ct));
 }

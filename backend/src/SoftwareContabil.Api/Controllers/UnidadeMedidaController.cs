@@ -1,10 +1,6 @@
-
-// Controller REST de UnidadeMedida: endpoints explícitos (sem controller base genérica).
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoftwareContabil.Application.IService;
-using SoftwareContabil.Application.Service;
 using SoftwareContabil.Domain.Entities;
 
 namespace SoftwareContabil.Api.Controllers;
@@ -14,39 +10,39 @@ namespace SoftwareContabil.Api.Controllers;
 [Route("api/[controller]")]
 public class UnidadeMedidaController : ControllerBase
 {
-    private readonly IUnidadeMedidaService _service;
+    private readonly IUnidadeMedidaService _unidademedidaService;
 
-    public UnidadeMedidaController(IUnidadeMedidaService service)
+    public UnidadeMedidaController(IUnidadeMedidaService unidademedidaService)
     {
-        _service = service;
+        _unidademedidaService = unidademedidaService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UnidadeMedida>>> GetAll(CancellationToken ct)
-        => Ok(await _service.GetAllAsync(ct));
+        => Ok(await _unidademedidaService.GetAllAsync(ct));
 
     [HttpGet("{id}")]
     public async Task<ActionResult<UnidadeMedida>> GetById(int id, CancellationToken ct)
-        => Ok(await _service.GetByIdAsync(id, ct));
+        => Ok(await _unidademedidaService.GetByIdAsync(id, ct));
 
     [HttpPost]
     public async Task<ActionResult<UnidadeMedida>> Create([FromBody] UnidadeMedida entity, CancellationToken ct)
     {
-        var created = await _service.CreateAsync(entity, ct);
+        var created = await _unidademedidaService.CreateAsync(entity, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UnidadeMedida entity, CancellationToken ct)
     {
-        await _service.UpdateAsync(id, entity, ct);
+        await _unidademedidaService.UpdateAsync(id, entity, ct);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        await _service.DeleteAsync(id, ct);
+        await _unidademedidaService.DeleteAsync(id, ct);
         return NoContent();
     }
 }
